@@ -1,0 +1,62 @@
+{
+	"name": "n8n-nodes-xmlvalid",
+	"version": "1.0.0",
+	"description": "n8n node for xmlvalid: validate XML documents and e-invoices (Peppol, XRechnung, Factur-X, UBL, CII) against XSD, DTD, RelaxNG and Schematron business rules",
+	"license": "MIT",
+	"homepage": "https://xmlvalid.com/docs/api",
+	"keywords": [
+		"n8n-community-node-package",
+		"xml",
+		"xsd",
+		"validation",
+		"e-invoice",
+		"peppol",
+		"xrechnung",
+		"factur-x",
+		"schematron"
+	],
+	"author": {
+		"name": "xmlvalid",
+		"email": "support@xmlvalid.com",
+		"url": "https://xmlvalid.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/xmlvalid/n8n-nodes-xmlvalid.git"
+	},
+	"bugs": {
+		"url": "https://github.com/xmlvalid/n8n-nodes-xmlvalid/issues"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/XmlvalidApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Xmlvalid/Xmlvalid.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "^0.52.5",
+		"eslint": "9.32.0",
+		"prettier": "3.6.2",
+		"release-it": "^21.1.0",
+		"typescript": "5.9.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}
