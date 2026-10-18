@@ -26,7 +26,7 @@ The node sends the key as `Authorization: Bearer xv_…`. Saving the credential 
   - **Document Source**: a **binary file** from a previous node (XML, gzip, ZIP archive, Factur-X / ZUGFeRD PDF), a **URL** xmlvalid downloads, or the XML as **text**.
   - **Schema**: **Auto-Detect** picks the e-invoice profile the document names (its specification identifier, BT-24) and otherwise checks well-formedness and the document's DOCTYPE. Or choose a catalog schema or one of your saved schemas from the list.
   - **Simplify** (on by default) returns the verdict and the findings only; off, the full API response.
-  - Options: **Wait for Result** (off returns the validation queued, to fetch later with Get), **Timeout**, **File Name**.
+  - Options: **Wait for Result** (off returns the validation queued, to fetch later with Get), **Timeout**, **File Name**, **Rules Version** (pins such as `peppol-bis-3-ubl@3.0.21`, separated by commas: the node fails with `rules_version_mismatch` when the business rules have moved to another release, instead of returning findings of rules that changed).
 - **Get**: a validation by its ID, finished or not. Results are kept for 24 hours.
 - **Cancel**: cancels a validation that is still queued or running.
 - **Share Report**: one public HTML report link for one or more finished validations, open for 30 days (Pro).
@@ -49,6 +49,10 @@ With **Simplify** on:
   "valid": false,
   "outcome": "invalid",
   "schema": "peppol-bis-3-invoice",
+  "rule_sets": [
+    { "key": "en16931-ubl-1.3.16", "name": "EN 16931 rules 1.3.16 (UBL)", "version": "1.3.16" },
+    { "key": "peppol-bis-3-ubl", "name": "Peppol BIS Billing 3.0 rules", "version": "3.0.21" }
+  ],
   "errors_total": 1,
   "warnings_total": 0,
   "errors": [
@@ -65,7 +69,7 @@ With **Simplify** on:
 }
 ```
 
-`outcome` is `valid`, `warnings` (valid, with warnings), `invalid`, `schema` (the schema or rules could not be used), `input` (the document could not be read) or `failed`. Route on `valid` with an **If** node.
+`outcome` is `valid`, `warnings` (valid, with warnings), `invalid`, `schema` (the schema or rules could not be used), `input` (the document could not be read) or `failed`. Route on `valid` with an **If** node. `rule_sets` names the business rules run and their releases.
 
 ## Example workflows
 

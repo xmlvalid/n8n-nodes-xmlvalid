@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-xmlvalid",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"description": "n8n node for xmlvalid: validate XML documents and e-invoices (Peppol, XRechnung, Factur-X, UBL, CII) against XSD, DTD, RelaxNG and Schematron business rules",
 	"license": "MIT",
 	"publishConfig": {

@@ -94,6 +94,7 @@ function simplify(validation: IDataObject): IDataObject {
 		valid: result.valid ?? false,
 		outcome: result.outcome ?? null,
 		schema: schema.catalog ?? schema.name ?? null,
+		rule_sets: validation.rule_sets ?? [],
 		errors_total: result.errors_total ?? 0,
 		warnings_total: result.warnings_total ?? 0,
 		errors: ((result.errors ?? []) as IDataObject[]).map(finding),
@@ -273,6 +274,15 @@ export class Xmlvalid implements INodeType {
 							'Shown in your validation history when you keep file names. Defaults to the binary file name.',
 					},
 					{
+						displayName: 'Rules Version',
+						name: 'rulesVersion',
+						type: 'string',
+						default: '',
+						placeholder: 'peppol-bis-3-ubl@3.0.21',
+						description:
+							'Pin the business rules to the releases your workflow was checked against, as rule-set@version, separated by commas. When one has moved to another release, the node fails instead of returning findings of rules that changed. List Schemas shows each schema\'s rule_sets.',
+					},
+					{
 						displayName: 'Timeout (Minutes)',
 						name: 'timeout',
 						type: 'number',
@@ -394,16 +404,24 @@ async function validate(this: IExecuteFunctions, i: number): Promise<IDataObject
 	const schema = (this.getNodeParameter('schema', i, 'auto') as string) || 'auto';
 	const options = this.getNodeParameter('options', i, {}) as {
 		fileName?: string;
+		rulesVersion?: string;
 		timeout?: number;
 		waitForResult?: boolean;
 	};
 	const waitForResult = options.waitForResult ?? true;
 	const wait = waitForResult ? 60 : 0;
+	// The API takes several pins comma-separated, in the query and in JSON alike.
+	const pins = (options.rulesVersion ?? '')
+		.split(',')
+		.map((pin) => pin.trim())
+		.filter((pin) => pin !== '')
+		.join(',');
+	const pinned = pins !== '' ? { rules_version: pins } : {};
 
 	let response: { status: number; body: IDataObject };
 	if (source === 'url') {
 		const url = (this.getNodeParameter('url', i) as string).trim();
-		response = await api.call(this, 'POST', '/validations', { body: { url, schema, wait } });
+		response = await api.call(this, 'POST', '/validations', { body: { url, schema, wait, ...pinned } });
 	} else {
 		let document: Buffer;
 		let name = options.fileName;
@@ -420,7 +438,7 @@ async function validate(this: IExecuteFunctions, i: number): Promise<IDataObject
 		}
 		response = await api.call(this, 'POST', '/validations', {
 			body: document,
-			qs: { schema, wait, ...(name ? { name } : {}) },
+			qs: { schema, wait, ...pinned, ...(name ? { name } : {}) },
 			contentType: source === 'text' ? 'application/xml' : 'application/octet-stream',
 		});
 	}
