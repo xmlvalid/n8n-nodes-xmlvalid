@@ -1,4 +1,4 @@
-# Publishes n8n-nodes-xmlvalid to npm, with provenance, when an X.Y.Z tag is pushed.
+# Publishes n8n-nodes-xmlvalid to npm, with provenance, when a vX.Y.Z tag is pushed.
 # n8n verifies community nodes only when they are published from GitHub Actions with provenance.
 #
 # One-time setup, with Trusted Publishing (no token stored anywhere):
@@ -9,14 +9,13 @@
 # A run stages the version; it goes live once approved with 2FA on npmjs.com (Staged Packages) or with `npm stage approve <stage-id>`. `npm stage` needs npm 12.
 #
 # Releasing: bump "version" in package.json and CHANGELOG.md, commit, then
-#   git tag 1.2.1 && git push origin 1.2.1
-# Tags have no "v", as `n8n-node release` made them.
+#   git tag v1.2.1 && git push origin v1.2.1
 
 name: Publish
 
 on:
   push:
-    tags: ['*.*.*']
+    tags: ['v*']
 
 jobs:
   publish:
@@ -32,7 +31,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
       - name: The tag matches the version
-        run: test "$(node -p 'require("./package.json").version')" = "${GITHUB_REF_NAME}"
+        run: test "v$(node -p 'require("./package.json").version')" = "${GITHUB_REF_NAME}"
       - run: npm ci
       - run: npm run lint
       - run: npm run build
