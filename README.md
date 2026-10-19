@@ -60,16 +60,18 @@ With **Simplify** on:
       "line": 139,
       "level": "error",
       "rule": "BR-CO-16",
+      "path": "/Invoice/cac:LegalMonetaryTotal",
       "message": "Amount due for payment (BT-115) = Invoice total amount with VAT (BT-112) -Paid amount (BT-113) +Rounding amount (BT-114).",
       "help_url": "https://xmlvalid.com/rules/BR-CO-16"
     }
   ],
   "warnings": [],
+  "sha256": "860e4052e7b5d1098ced143b044484afc47738af2db386a30a31184ced063457",
   "error": null
 }
 ```
 
-`outcome` is `valid`, `warnings` (valid, with warnings), `invalid`, `schema` (the schema or rules could not be used), `input` (the document could not be read) or `failed`. Route on `valid` with an **If** node. `rule_sets` names the business rules run and their releases.
+`outcome` is `valid`, `warnings` (valid, with warnings), `invalid`, `schema` (the schema or rules could not be used), `input` (the document could not be read) or `failed`. Route on `valid` with an **If** node. `rule_sets` names the business rules run and their releases. A finding's `path` says where a business rule fired, as an XPath; `sha256` is the hash of the document as sent.
 
 ## Example workflows
 

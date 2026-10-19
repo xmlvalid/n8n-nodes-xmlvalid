@@ -84,6 +84,7 @@ function simplify(validation: IDataObject): IDataObject {
 		line: d.line,
 		level: d.level,
 		rule: d.rule ?? null,
+		path: d.path ?? null,
 		message: d.message_en ?? d.message,
 		help_url: d.rule_url ?? d.help_url ?? null,
 	});
@@ -99,6 +100,7 @@ function simplify(validation: IDataObject): IDataObject {
 		warnings_total: result.warnings_total ?? 0,
 		errors: ((result.errors ?? []) as IDataObject[]).map(finding),
 		warnings: ((result.warnings ?? []) as IDataObject[]).map(finding),
+		sha256: result.sha256 ?? null,
 		error: validation.error ?? null,
 	};
 }
