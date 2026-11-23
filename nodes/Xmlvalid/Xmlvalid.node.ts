@@ -20,6 +20,9 @@ type Context = IExecuteFunctions | ILoadOptionsFunctions;
 
 const FINISHED = ['done', 'failed', 'cancelled'];
 
+// Names the node to the API, which counts runs by client (keep with package.json's version).
+const USER_AGENT = 'xmlvalid-n8n/1.2.1';
+
 async function api(
 	this: Context,
 	method: IHttpRequestMethods,
@@ -36,6 +39,7 @@ async function api(
 		qs: options.qs,
 		headers: {
 			Accept: 'application/json',
+			'User-Agent': USER_AGENT,
 			...(options.contentType ? { 'Content-Type': options.contentType } : {}),
 		},
 		body: isJson ? JSON.stringify(options.body) : (options.body as Buffer | string | undefined),
